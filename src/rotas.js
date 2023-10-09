@@ -11,5 +11,6 @@ rotas.get("/", (req, res) => {
 
 
 rotas.get("/contas", contas.listarContas);
+rotas.post("/contas", contas.criarContas);
 
-module.exports = rotas
+module.exports = rotas;
