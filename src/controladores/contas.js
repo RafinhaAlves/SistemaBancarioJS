@@ -42,9 +42,9 @@ const criarContas = (req, res) => {
 }
 
 const deletarConta = (req, res) => { 
-    const { numeroconta } = req.params;
+    const { numeroConta } = req.params;
     const conta = contas.find((elemento) => {
-            return elemento.numero === Number(numeroconta);
+            return elemento.numero === Number(numeroConta)
     });
 
     if (!conta) {
@@ -52,17 +52,42 @@ const deletarConta = (req, res) => {
     };
 
     contas = contas.filter((elemento) => {
-        return elemento.numero !== Number(numeroconta);
+        return elemento.numero !== Number(numeroConta);
     });
 
 
     return res.status(204).send();
 }
-    
 
+const atualizarConta = (req, res) => {
+    const { numeroConta } = req.params;
+    const { nome, cpf, data_nascimento, telefone, email, senha } = req.body;
+
+    if (!nome || !cpf || !data_nascimento || !telefone || !email || !senha) {
+        return res.status(400).json({ mensagem: "aaaaa"});
+    }
+    const contaAtualizar = contas.find((conta) => {
+        return conta.numero === Number(numeroConta);
+    });
+    if (!contaAtualizar) {
+        return res.status(404).json({ mensagem: "Num tem conta boy"});
+    }
+    
+const informacoes = contaAtualizar.usuario
+
+    informacoes.nome = nome;
+    informacoes.cpf = cpf;
+    informacoes.data_nascimento = data_nascimento;
+    informacoes.telefone = telefone;
+    informacoes.email = email;
+    informacoes.senha = senha;
+
+   return res.status(204).send();
+}
 module.exports = {
     listarContas,
     criarContas,
-    deletarConta
+    deletarConta,
+    atualizarConta
 }
 
