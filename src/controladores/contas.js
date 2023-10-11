@@ -46,7 +46,11 @@ const deletarConta = (req, res) => {
     const conta = contas.find((elemento) => {
             return elemento.numero === Number(numeroConta)
     });
+const saldo = conta.saldo
 
+if (saldo > 0) {
+    return res.status(404).json({ mensagem: "A conta só pode ser removida se o saldo for zero!"})
+}
     if (!conta) {
         return res.status(404).json({ mensagem: "A conta não existe."})
     };
@@ -54,6 +58,7 @@ const deletarConta = (req, res) => {
     contas = contas.filter((elemento) => {
         return elemento.numero !== Number(numeroConta);
     });
+    
 
 
     return res.status(204).send();
@@ -84,10 +89,36 @@ const informacoes = contaAtualizar.usuario
 
    return res.status(204).send();
 }
+
+const depositarConta = (req, res) => {
+
+    const { numero_conta, valor } = req.body;
+
+    if (!numero_conta || !valor) {
+        return res.status(404).json({ mensagem: "O número da conta e o valor são obrigatórios!"});
+    };
+    const contaADepositar = contas.find((conta) => {
+        return conta.numero === Number(numero_conta);
+    })
+    if (!contaADepositar) {
+        return res.status(404).json({ mensagem: "Conta não existe!"})
+    }
+    if (numero_conta <= 0) {
+        return res.status(404).json({ mensagem: "Valor zerado ou negativo!"})
+    }
+    contaADepositar.saldo = valor + contaADepositar.saldo;
+    
+    return res.status(204).send()
+}
+
+
+
+
 module.exports = {
     listarContas,
     criarContas,
     deletarConta,
-    atualizarConta
+    atualizarConta,
+    depositarConta
 }
 
