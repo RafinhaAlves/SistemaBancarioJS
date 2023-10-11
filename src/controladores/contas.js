@@ -1,5 +1,6 @@
-const { contas, banco } = require("../bancodedados")
+let { contas, banco } = require("../bancodedados");
 let { identificadorConta } = require("../bancodedados");
+
 
 const listarContas = (req, res) => {
     const senha_principal = banco.senha;
@@ -24,7 +25,7 @@ const criarContas = (req, res) => {
 
 
     const conta = {
-        id: identificadorConta++,
+        numero: identificadorConta++,
         saldo: 0,
         usuario: {
             nome,
@@ -35,37 +36,33 @@ const criarContas = (req, res) => {
             senha
         }
     } 
-
-
     contas.push(conta);
     return res.status(201).json(conta);
 
-
-
-
 }
 
+const deletarConta = (req, res) => { 
+    const { numeroconta } = req.params;
+    const conta = contas.find((elemento) => {
+            return elemento.numero === Number(numeroconta);
+    });
+
+    if (!conta) {
+        return res.status(404).json({ mensagem: "A conta não existe."})
+    };
+
+    contas = contas.filter((elemento) => {
+        return elemento.numero !== Number(numeroconta);
+    });
+
+
+    return res.status(204).send();
+}
+    
 
 module.exports = {
     listarContas,
-    criarContas
+    criarContas,
+    deletarConta
 }
 
-// if (nome) { res.send("Sim")}
-//     else {res.send("não")}
-//         console.log(req.body)
-
-
-// 
-
-
-//(req, res) => {
-//     let { senha_banco } = req.query;
-//     let { senha } = bancodedados.banco;
-
-//     let resultado = [];
-
-//    if (senha_banco !== senha) {
-//     res.send ("Quase lá")
-//    }
-// }

@@ -13,4 +13,8 @@ rotas.get("/", (req, res) => {
 rotas.get("/contas", contas.listarContas);
 rotas.post("/contas", contas.criarContas);
 
+rotas.delete("/contas/:numeroconta", contas.deletarConta);
+
+
+
 module.exports = rotas;

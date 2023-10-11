@@ -1,7 +1,7 @@
 
 
 
-const bancodedados = {
+module.exports = {
  identificadorConta: 2,
 
     banco: {
@@ -12,7 +12,7 @@ const bancodedados = {
     },
     contas: [
         {
-            id: 1,
+            numero: 1,
             saldo: 1000,
             usuario: {
                 nome: "Pinposo",
@@ -22,7 +22,7 @@ const bancodedados = {
                 email: "foo@bar2.com",
                 senha: "12345"
             }
-        },
+        }
     
 
        
@@ -34,4 +34,3 @@ const bancodedados = {
     transferencias: []
 
 };
-module.exports = bancodedados
