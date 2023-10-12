@@ -149,9 +149,54 @@ const sacarDaConta = (req, res) => {
 
     return res.status(204).send()
 }
-const saquess = (req, res) => {
-    return res.json(saques)
+
+const transferir = (req, res) => {
+    const { numero_conta_origem, numero_conta_destino, valor, senha } = req.body;
+
+    if (!numero_conta_origem || !numero_conta_destino || !valor || !senha ) {
+        return res.status(404).json({ mensagem: "Dados informados não validos!"});
+    }
+    const contaOrigem = contas.find((conta) => {
+        return conta.numero === Number(numero_conta_origem)});
+    const contaDestino = contas.find((conta) => {
+        return conta.numero === Number(numero_conta_destino)});
+    
+    if (!contaOrigem) {return res.status(404).json({ mensagem: "Conta de origem inexistente."})};
+    if (!contaDestino) {return res.status(404).json({ mensagem: "Conta de destino inexistente."})};
+    
+    if(contaOrigem.usuario.senha !== senha) {
+        return res.status(404).json({ mensagem: "Senha incorreta."})};
+
+    if(contaOrigem.saldo < valor){
+        return res.status(404).json({ mensagem: "Saldo insuficiente."})};
+
+    contaOrigem.saldo = contaOrigem.saldo - valor;
+    contaDestino.saldo = contaDestino.saldo + valor;
+
+        transferencias.push({
+            data: new Date().toLocaleString(),
+            numero_conta_destino,
+            numero_conta_origem,
+            valor
+        })
+
+    return res.status(204).send()
 }
+
+const saldo = (req, res) => {
+ const { numero_conta, senha } = req.query;
+
+ const conta = contas.find((conta) => {
+    return conta.numero === Number(numero_conta)
+ });
+ if(!conta) {return res.status(404).json({ mensagem: "Conta bancária não encontrada!"})};
+ if(conta.usuario.senha !== senha) {
+    return res.status(404).json({ mensagem: "Senha incorreta!"})};
+    
+    return res.status(200).json({ saldo: conta.saldo})
+ 
+}
+
 
 module.exports = {
     listarContas,
@@ -160,7 +205,8 @@ module.exports = {
     atualizarConta,
     depositarConta,
     sacarDaConta,
-    saquess
+    transferir,
+    saldo
     
 }
 

@@ -18,8 +18,8 @@ rotas.delete("/contas/:numeroConta", contas.deletarConta);
 rotas.put("/contas/:numeroConta", contas.atualizarConta);
 rotas.post("/transacoes/depositar", contas.depositarConta);
 rotas.post("/transacoes/sacar", contas.sacarDaConta);
-
-
+rotas.get("/transacoes/transferir", contas.transferir);
+rotas.get("/contas/saldo", contas.saldo);
 
 
 
