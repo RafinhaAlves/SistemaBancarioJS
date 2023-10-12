@@ -189,12 +189,19 @@ const saldo = (req, res) => {
  const conta = contas.find((conta) => {
     return conta.numero === Number(numero_conta)
  });
+ if(!numero_conta || !senha) {return res.status(404).json({ mensagem: "Numero da conta e senha são obrigatorios!"})}
  if(!conta) {return res.status(404).json({ mensagem: "Conta bancária não encontrada!"})};
  if(conta.usuario.senha !== senha) {
     return res.status(404).json({ mensagem: "Senha incorreta!"})};
+   
     
     return res.status(200).json({ saldo: conta.saldo})
  
+}
+
+const extrato = (req, res) => {
+ const {numero_conta, senha} = req.query;
+
 }
 
 
@@ -206,7 +213,7 @@ module.exports = {
     depositarConta,
     sacarDaConta,
     transferir,
-    saldo
-    
+    saldo,
+    extrato
 }
 
