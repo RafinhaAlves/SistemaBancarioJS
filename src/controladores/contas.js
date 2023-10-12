@@ -1,4 +1,4 @@
-let { contas, banco } = require("../bancodedados");
+let { contas, banco, saques, depositos, transferencias } = require("../bancodedados");
 let { identificadorConta } = require("../bancodedados");
 
 
@@ -108,10 +108,18 @@ const depositarConta = (req, res) => {
     }
     contaADepositar.saldo = valor + contaADepositar.saldo;
     
+    depositos.push({
+        data: new Date().toLocaleString(),
+        numero_conta,
+        valor
+    })
+    
     return res.status(204).send()
 }
 
-
+const todosDepositos = (req, res) => {
+ return res.json(depositos);
+}
 
 
 module.exports = {
@@ -119,6 +127,7 @@ module.exports = {
     criarContas,
     deletarConta,
     atualizarConta,
-    depositarConta
+    depositarConta,
+    todosDepositos
 }
 

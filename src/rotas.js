@@ -18,4 +18,7 @@ rotas.put("/contas/:numeroConta", contas.atualizarConta);
 rotas.post("/transacoes/depositar", contas.depositarConta);
 
 
+rotas.get("/contas/depositos", contas.todosDepositos)
+
+
 module.exports = rotas;
