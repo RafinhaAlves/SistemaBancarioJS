@@ -1,6 +1,7 @@
 const express = require("express");
 const rotas = express();
-const contas = require("./controladores/contas")
+const contas = require("./controladores/contas");
+const { saques } = require("./bancodedados");
 
 rotas.get("/", (req, res) => {
     res.send("Tudo ok");
@@ -16,9 +17,10 @@ rotas.post("/contas", contas.criarContas);
 rotas.delete("/contas/:numeroConta", contas.deletarConta);
 rotas.put("/contas/:numeroConta", contas.atualizarConta);
 rotas.post("/transacoes/depositar", contas.depositarConta);
+rotas.post("/transacoes/sacar", contas.sacarDaConta);
 
 
-rotas.get("/contas/depositos", contas.todosDepositos)
+
 
 
 module.exports = rotas;

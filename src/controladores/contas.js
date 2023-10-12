@@ -91,7 +91,6 @@ const informacoes = contaAtualizar.usuario
 }
 
 const depositarConta = (req, res) => {
-
     const { numero_conta, valor } = req.body;
 
     if (!numero_conta || !valor) {
@@ -117,10 +116,42 @@ const depositarConta = (req, res) => {
     return res.status(204).send()
 }
 
-const todosDepositos = (req, res) => {
- return res.json(depositos);
-}
+const sacarDaConta = (req, res) => {
+    const { numero_conta, valor, senha } = req.body;
 
+    if (!numero_conta || !valor || !senha) {
+        return res.status(404).json({ mensagem: "Numero da conta, valor e senha são obrigatorios!"});
+    }
+    if (valor <= 0) {
+        return res.status(404).json({ mensagem: "O valor não pode ser menor que zero!"})
+    }
+
+    const verficarConta = contas.find((conta) => {
+        return conta.numero === Number(numero_conta);
+    });
+    if (!verficarConta) {
+        return res.status(404).json({ mensagem: "Conta não existe!"});
+    }
+    if (verficarConta.usuario.senha !== senha) {
+        return res.status(404).json({ mensagem: "Senha incorreta!"});
+    }
+    if (verficarConta.saldo <= 0) {
+        return res.status(404).json ({ mensagem: "Saldo insuficiente!"});
+    }
+    verficarConta.saldo = verficarConta.saldo - valor
+
+    saques.push({
+        data: new Date().toLocaleString(),
+        numero_conta,
+        valor
+    })
+    
+
+    return res.status(204).send()
+}
+const saquess = (req, res) => {
+    return res.json(saques)
+}
 
 module.exports = {
     listarContas,
@@ -128,6 +159,8 @@ module.exports = {
     deletarConta,
     atualizarConta,
     depositarConta,
-    todosDepositos
+    sacarDaConta,
+    saquess
+    
 }
 
