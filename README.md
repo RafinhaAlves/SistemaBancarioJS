@@ -1,3 +1,24 @@
+# Sistema bancário
+## Um projeto para simular um sistema bancário!
+
+### Todo o projeto se resume em 4 arquivos principais.
+### São eles:
+
+- index.js = Usado para comunicação entre arquivos e servidor.
+- contas.js = Referece ao local onde estão todas as funções principais do projeto.
+- rotas.js = Onde está organizado todas as rotas usadas.
+- bancodedados.js = Local onde todos os dados de entrada e saida trafegam.
+
+### Para o uso é necessario o comando `npm install` para instalar uma dependêsncia nescessária.
+-  express
+
+![image](https://github.com/RafinhaAlves/desafio-backend-modulo-02-sistema-bancario-b2b-ifood-t11/assets/142266616/470fa0f1-e06d-4069-b369-c6c427ee0b08)
+![image](https://github.com/RafinhaAlves/desafio-backend-modulo-02-sistema-bancario-b2b-ifood-t11/assets/142266616/0863e92e-7c63-41fb-af96-51aa3521fe6a)
+![image](https://github.com/RafinhaAlves/desafio-backend-modulo-02-sistema-bancario-b2b-ifood-t11/assets/142266616/41d0aa55-fee5-4346-ae4f-c6a2b1e5d9b3)
+
+
+
+
 ![](https://i.imgur.com/xG74tOh.png)
 
 # Desafio Módulo 2 - Back-end
