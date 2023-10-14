@@ -1,4 +1,4 @@
-let { contas, banco, saques, depositos, transferencias } = require("../bancodedados");
+let { contas, banco, saques, transferencias, depositos } = require("../bancodedados");
 let { identificadorConta } = require("../bancodedados");
 
 
@@ -9,19 +9,19 @@ const listarContas = (req, res) => {
     if (senha_banco == senha_principal){
         return res.json(contas); 
     } else {
-        return res.status(403).json ({ mensagem: "A senha do banco informada é inválida!"});
+        return res.status(403).json ({ "mensagem": "A senha do banco informada é inválida!"});
     }
 }
 
 const criarContas = (req, res) => {
     const { nome, cpf, data_nascimento, telefone, email, senha } = req.body;
 
-    if (!nome) {return res.status(400).json({mensagem: "O nome é obrigatório."})};
-    if (!cpf) {return res.status(400).json({mensagem: "O cpf é obrigatório."})};
-    if (!data_nascimento) {return res.status(400).json({mensagem: "A data de nascimento é obrigatório."})};
-    if (!telefone) {return res.status(400).json({mensagem: "O telefone é obrigatório."})};
-    if (!email) {return res.status(400).json({mensagem: "O email é obrigatório."})};
-    if (!senha) {return res.status(400).json({mensagem: "A senha é obrigatório."})};
+    if (!nome) {return res.status(400).json({"mensagem": "O nome é obrigatório!"})};
+    if (!cpf) {return res.status(400).json({"mensagem": "O cpf é obrigatório!"})};
+    if (!data_nascimento) {return res.status(400).json({"mensagem": "A data de nascimento é obrigatório!"})};
+    if (!telefone) {return res.status(400).json({"mensagem": "O telefone é obrigatório!"})};
+    if (!email) {return res.status(400).json({"mensagem": "O email é obrigatório!"})};
+    if (!senha) {return res.status(400).json({"mensagem": "A senha é obrigatório!"})};
 
 
     const conta = {
@@ -49,10 +49,10 @@ const deletarConta = (req, res) => {
 const saldo = conta.saldo
 
 if (saldo > 0) {
-    return res.status(404).json({ mensagem: "A conta só pode ser removida se o saldo for zero!"})
+    return res.status(404).json({ "mensagem": "A conta só pode ser removida se o saldo for zero!"})
 }
     if (!conta) {
-        return res.status(404).json({ mensagem: "A conta não existe."})
+        return res.status(404).json({ "mensagem": "A conta não existe!"})
     };
 
     contas = contas.filter((elemento) => {
@@ -69,13 +69,13 @@ const atualizarConta = (req, res) => {
     const { nome, cpf, data_nascimento, telefone, email, senha } = req.body;
 
     if (!nome || !cpf || !data_nascimento || !telefone || !email || !senha) {
-        return res.status(400).json({ mensagem: "aaaaa"});
+        return res.status(400).json({ "mensagem": "Todos os campos são obrigatórios!"});
     }
     const contaAtualizar = contas.find((conta) => {
         return conta.numero === Number(numeroConta);
     });
     if (!contaAtualizar) {
-        return res.status(404).json({ mensagem: "Num tem conta boy"});
+        return res.status(404).json({ "mensagem": "Conta inexistente!"});
     }
     
 const informacoes = contaAtualizar.usuario
@@ -94,16 +94,16 @@ const depositarConta = (req, res) => {
     const { numero_conta, valor } = req.body;
 
     if (!numero_conta || !valor) {
-        return res.status(404).json({ mensagem: "O número da conta e o valor são obrigatórios!"});
+        return res.status(404).json({ "mensagem": "O número da conta e o valor são obrigatórios!"});
     };
     const contaADepositar = contas.find((conta) => {
         return conta.numero === Number(numero_conta);
     })
     if (!contaADepositar) {
-        return res.status(404).json({ mensagem: "Conta não existe!"})
+        return res.status(404).json({ "mensagem": "Conta não existe!"})
     }
     if (numero_conta <= 0) {
-        return res.status(404).json({ mensagem: "Valor zerado ou negativo!"})
+        return res.status(404).json({ "mensagem": "Valor zerado ou negativo!"})
     }
     contaADepositar.saldo = valor + contaADepositar.saldo;
     
@@ -120,24 +120,24 @@ const sacarDaConta = (req, res) => {
     const { numero_conta, valor, senha } = req.body;
 
     if (!numero_conta || !valor || !senha) {
-        return res.status(404).json({ mensagem: "Numero da conta, valor e senha são obrigatorios!"});
-    }
+        return res.status(404).json({ "mensagem": "Numero da conta, valor e senha são obrigatorios!"})
+    };
     if (valor <= 0) {
-        return res.status(404).json({ mensagem: "O valor não pode ser menor que zero!"})
-    }
+        return res.status(404).json({ "mensagem": "O valor não pode ser menor que zero!"})
+    };
 
     const verficarConta = contas.find((conta) => {
         return conta.numero === Number(numero_conta);
     });
     if (!verficarConta) {
-        return res.status(404).json({ mensagem: "Conta não existe!"});
-    }
+        return res.status(404).json({ "mensagem": "Conta não existe!"})
+    };
     if (verficarConta.usuario.senha !== senha) {
-        return res.status(404).json({ mensagem: "Senha incorreta!"});
-    }
+        return res.status(404).json({ "mensagem": "Senha incorreta!"})
+    };
     if (verficarConta.saldo <= 0) {
-        return res.status(404).json ({ mensagem: "Saldo insuficiente!"});
-    }
+        return res.status(404).json ({ "mensagem": "Saldo insuficiente!"})
+    };
     verficarConta.saldo = verficarConta.saldo - valor
 
     saques.push({
@@ -154,21 +154,21 @@ const transferir = (req, res) => {
     const { numero_conta_origem, numero_conta_destino, valor, senha } = req.body;
 
     if (!numero_conta_origem || !numero_conta_destino || !valor || !senha ) {
-        return res.status(404).json({ mensagem: "Dados informados não validos!"});
+        return res.status(404).json({ "mensagem": "Dados informados não validos!"});
     }
     const contaOrigem = contas.find((conta) => {
         return conta.numero === Number(numero_conta_origem)});
     const contaDestino = contas.find((conta) => {
         return conta.numero === Number(numero_conta_destino)});
     
-    if (!contaOrigem) {return res.status(404).json({ mensagem: "Conta de origem inexistente."})};
-    if (!contaDestino) {return res.status(404).json({ mensagem: "Conta de destino inexistente."})};
+    if (!contaOrigem) {return res.status(404).json({ "mensagem": "Conta de origem inexistente."})};
+    if (!contaDestino) {return res.status(404).json({ "mensagem": "Conta de destino inexistente."})};
     
     if(contaOrigem.usuario.senha !== senha) {
-        return res.status(404).json({ mensagem: "Senha incorreta."})};
+        return res.status(404).json({ "mensagem": "Senha incorreta."})};
 
     if(contaOrigem.saldo < valor){
-        return res.status(404).json({ mensagem: "Saldo insuficiente."})};
+        return res.status(404).json({ "mensagem": "Saldo insuficiente."})};
 
     contaOrigem.saldo = contaOrigem.saldo - valor;
     contaDestino.saldo = contaDestino.saldo + valor;
@@ -189,10 +189,10 @@ const saldo = (req, res) => {
  const conta = contas.find((conta) => {
     return conta.numero === Number(numero_conta)
  });
- if(!numero_conta || !senha) {return res.status(404).json({ mensagem: "Numero da conta e senha são obrigatorios!"})}
- if(!conta) {return res.status(404).json({ mensagem: "Conta bancária não encontrada!"})};
+ if(!numero_conta || !senha) {return res.status(404).json({ "mensagem": "Numero da conta e senha são obrigatórios!"})}
+ if(!conta) {return res.status(404).json({ "mensagem": "Conta bancária não encontrada!"})};
  if(conta.usuario.senha !== senha) {
-    return res.status(404).json({ mensagem: "Senha incorreta!"})};
+    return res.status(404).json({ "mensagem": "Senha incorreta!"})};
    
     
     return res.status(200).json({ saldo: conta.saldo})
@@ -201,9 +201,35 @@ const saldo = (req, res) => {
 
 const extrato = (req, res) => {
  const {numero_conta, senha} = req.query;
+ 
+ if(!numero_conta || !senha) {
+    return res.status(404).json({ "mensagem": "Numero e senha são obrigatórios"})};
 
+    const conta = contas.find((conta) => {
+        return conta.numero === Number(numero_conta)
+    });
+if (!conta) {return res.status(404).json ({ "mensagem": "Conta bancária não existe!"})}
+
+if(conta.usuario.senha !== senha){
+    return res.status(404).json({ "mensagem": "Senha incorreta!"})};
+
+
+
+    const transferenciasEnviadas = transferencias.filter(elemento => elemento.numero_conta_origem == numero_conta);
+    const transferenciasRecebidas = transferencias.filter(elemento => elemento.numero_conta_destino == numero_conta);
+    const saquess = saques.filter(elemento => elemento.numero_conta == numero_conta);
+    const depositoss = depositos.filter(elemento => elemento.numero_conta == numero_conta);
+    
+
+const extrato = {
+    depositos: depositoss,
+    saques: saquess,
+    transferenciasEnviadas: transferenciasEnviadas,
+    transferenciasRecebidas: transferenciasRecebidas
 }
-
+console.log(extrato)
+return res.status(204).json(extrato)
+}
 
 module.exports = {
     listarContas,
@@ -216,4 +242,3 @@ module.exports = {
     saldo,
     extrato
 }
-
